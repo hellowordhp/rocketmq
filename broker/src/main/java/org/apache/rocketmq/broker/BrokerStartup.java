@@ -37,6 +37,7 @@ import org.apache.rocketmq.remoting.netty.TlsSystemConfig;
 import org.apache.rocketmq.remoting.protocol.RemotingCommand;
 import org.apache.rocketmq.srvutil.ServerUtil;
 import org.apache.rocketmq.store.config.BrokerRole;
+import org.apache.rocketmq.store.config.FlushDiskType;
 import org.apache.rocketmq.store.config.MessageStoreConfig;
 import org.slf4j.LoggerFactory;
 
@@ -141,6 +142,17 @@ public class BrokerStartup {
             }
 
             MixAll.properties2Object(ServerUtil.commandLine2Properties(commandLine), brokerConfig);
+/*
+            brokerConfig.setBrokerId(0);
+            brokerConfig.setBrokerName("broker-b");
+            brokerConfig.setNamesrvAddr("127.0.0.1:9876");
+
+            messageStoreConfig.setDeleteWhen("04");
+            messageStoreConfig.setFileReservedTime(48);
+            messageStoreConfig.setFlushDiskType(FlushDiskType.ASYNC_FLUSH);
+            messageStoreConfig.setDuplicationEnable(false);
+
+            nettyServerConfig.setListenPort(10912);*/
 
             if (null == brokerConfig.getRocketmqHome()) {
                 System.out.printf("Please set the %s variable in your environment to match the location of the RocketMQ installation", MixAll.ROCKETMQ_HOME_ENV);

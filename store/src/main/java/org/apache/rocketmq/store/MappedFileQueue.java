@@ -464,6 +464,7 @@ public class MappedFileQueue {
             MappedFile firstMappedFile = this.getFirstMappedFile();
             MappedFile lastMappedFile = this.getLastMappedFile();
             if (firstMappedFile != null && lastMappedFile != null) {
+                //如果当前offset不在所有mapper文件区间内
                 if (offset < firstMappedFile.getFileFromOffset() || offset >= lastMappedFile.getFileFromOffset() + this.mappedFileSize) {
                     LOG_ERROR.warn("Offset not matched. Request offset: {}, firstOffset: {}, lastOffset: {}, mappedFileSize: {}, mappedFiles count: {}",
                         offset,
@@ -472,6 +473,7 @@ public class MappedFileQueue {
                         this.mappedFileSize,
                         this.mappedFiles.size());
                 } else {
+                    //获取mappedFile的索引
                     int index = (int) ((offset / this.mappedFileSize) - (firstMappedFile.getFileFromOffset() / this.mappedFileSize));
                     MappedFile targetFile = null;
                     try {
@@ -479,11 +481,13 @@ public class MappedFileQueue {
                     } catch (Exception ignored) {
                     }
 
+                    //当前的offset大于当前mapper的起始offset， 并且不能大于当前mapper的总offet
                     if (targetFile != null && offset >= targetFile.getFileFromOffset()
                         && offset < targetFile.getFileFromOffset() + this.mappedFileSize) {
                         return targetFile;
                     }
 
+                    //上面找不到的情况下会进入这个for循环查找符合条件mapperFile。   什么情况下会到这呢？？
                     for (MappedFile tmpMappedFile : this.mappedFiles) {
                         if (offset >= tmpMappedFile.getFileFromOffset()
                             && offset < tmpMappedFile.getFileFromOffset() + this.mappedFileSize) {
@@ -492,6 +496,7 @@ public class MappedFileQueue {
                     }
                 }
 
+                //到这基本上是什么都没找到了。。。。。。
                 if (returnFirstOnNotFound) {
                     return firstMappedFile;
                 }

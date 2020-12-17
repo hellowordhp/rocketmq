@@ -1128,6 +1128,7 @@ public class DefaultMessageStore implements MessageStore {
 
     public ConsumeQueue findConsumeQueue(String topic, int queueId) {
         ConcurrentMap<Integer, ConsumeQueue> map = consumeQueueTable.get(topic);
+        //没有该主题队列信息就创建一个
         if (null == map) {
             ConcurrentMap<Integer, ConsumeQueue> newMap = new ConcurrentHashMap<Integer, ConsumeQueue>(128);
             ConcurrentMap<Integer, ConsumeQueue> oldMap = consumeQueueTable.putIfAbsent(topic, newMap);
@@ -1139,6 +1140,7 @@ public class DefaultMessageStore implements MessageStore {
         }
 
         ConsumeQueue logic = map.get(queueId);
+        //没有该主题的队列信息就创建
         if (null == logic) {
             ConsumeQueue newLogic = new ConsumeQueue(
                 topic,
@@ -1821,7 +1823,7 @@ public class DefaultMessageStore implements MessageStore {
                     && this.reputFromOffset >= DefaultMessageStore.this.getConfirmOffset()) {
                     break;
                 }
-
+                //返回重放的MappedFile、offsetSize 和 Buffer(pos=0;limit=offsetSize)
                 SelectMappedBufferResult result = DefaultMessageStore.this.commitLog.getData(reputFromOffset);
                 if (result != null) {
                     try {

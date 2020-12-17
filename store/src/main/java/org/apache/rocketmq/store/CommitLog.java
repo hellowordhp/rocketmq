@@ -143,6 +143,7 @@ public class CommitLog {
         return this.getData(offset, offset == 0);
     }
 
+    //根据offset或者在offset区间中的MapperFile
     public SelectMappedBufferResult getData(final long offset, final boolean returnFirstOnNotFound) {
         int mappedFileSize = this.defaultMessageStore.getMessageStoreConfig().getMappedFileSizeCommitLog();
         MappedFile mappedFile = this.mappedFileQueue.findMappedFileByOffset(offset, returnFirstOnNotFound);
@@ -340,6 +341,7 @@ public class CommitLog {
             }
 
             int readLength = calMsgLength(bodyLen, topicLen, propertiesLength);
+            //这条消息的总长度不等读取的长度
             if (totalSize != readLength) {
                 doNothingForDeadCode(reconsumeTimes);
                 doNothingForDeadCode(flag);
@@ -352,6 +354,7 @@ public class CommitLog {
                 return new DispatchRequest(totalSize, false/* success */);
             }
 
+            //decode 拼装。。。  todo 为什么要跳过body的解码呢
             return new DispatchRequest(
                 topic,
                 queueId,
@@ -1104,7 +1107,7 @@ public class CommitLog {
                             }
                         }
 
-                        req.wakeupCustomer(flushOK);
+                        req.wakeupCustomer(false);
                     }
 
                     long storeTimestamp = CommitLog.this.mappedFileQueue.getStoreTimestamp();

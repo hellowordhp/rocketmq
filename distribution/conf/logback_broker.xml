@@ -326,12 +326,15 @@
     </logger>
 
     <logger name="RocketmqConsole" additivity="false">
-        <level value="INFO"/>
+        <level value="DEBUG"/>
         <appender-ref ref="STDOUT"/>
+
     </logger>
 
     <root>
-        <level value="INFO"/>
+        <level value="DEBUG"/>
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="RocketmqBrokerAppender_inner"/>
         <appender-ref ref="DefaultAppender"/>
     </root>
 </configuration>

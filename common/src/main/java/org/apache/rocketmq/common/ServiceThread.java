@@ -40,6 +40,25 @@ public abstract class ServiceThread implements Runnable {
 
     }
 
+    public static void main(String[] args) {
+        ServiceThread serviceThread = new ServiceThread() {
+            @Override
+            public void run() {
+                while (!this.stopped){
+                    this.waitForRunning(1000);
+                    System.out.println("run");
+                }
+            }
+
+            @Override
+            public String getServiceName() {
+                return "test";
+            }
+        };
+
+        serviceThread.start();
+    }
+
     public abstract String getServiceName();
 
     public void start() {
