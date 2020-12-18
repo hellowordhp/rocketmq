@@ -1419,6 +1419,8 @@ public class DefaultMessageStore implements MessageStore {
     }
 
     public void doDispatch(DispatchRequest req) {
+        // 非事务消息 或 事务提交消息 建立 消息位置信息 到 ConsumeQueue
+        // 建立 索引信息 到 IndexFile
         for (CommitLogDispatcher dispatcher : this.dispatcherList) {
             dispatcher.dispatch(req);
         }
