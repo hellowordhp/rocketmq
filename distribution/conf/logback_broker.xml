@@ -336,5 +336,6 @@
         <appender-ref ref="STDOUT"/>
         <appender-ref ref="RocketmqBrokerAppender_inner"/>
         <appender-ref ref="DefaultAppender"/>
+        <appender-ref ref="STDOUT"/>
     </root>
 </configuration>

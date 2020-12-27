@@ -254,6 +254,7 @@ public class BrokerController {
             }
         }
 
+        //加载已有的log
         result = result && this.messageStore.load();
 
         if (result) {
@@ -332,6 +333,7 @@ public class BrokerController {
                 }
             }, initialDelay, period, TimeUnit.MILLISECONDS);
 
+            // 每 5s 执行一次持久化逻辑。
             this.scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
                 @Override
                 public void run() {
@@ -822,6 +824,7 @@ public class BrokerController {
     }
 
     public void start() throws Exception {
+        //启动服务线程
         if (this.messageStore != null) {
             this.messageStore.start();
         }

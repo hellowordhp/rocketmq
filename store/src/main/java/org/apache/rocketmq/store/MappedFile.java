@@ -391,6 +391,7 @@ public class MappedFile extends ReferenceResource {
                     + this.fileFromOffset);
             }
         } else {
+            //查询的MappedBuffer位置 还未读取到。。。
             log.warn("selectMappedBuffer request pos invalid, request pos: " + pos + ", size: " + size
                 + ", fileFromOffset: " + this.fileFromOffset);
         }

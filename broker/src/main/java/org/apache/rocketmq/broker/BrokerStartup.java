@@ -141,6 +141,17 @@ public class BrokerStartup {
                 }
             }
 
+//            brokerConfig.setBrokerId(0);
+//            brokerConfig.setBrokerName("broker-b");
+//            brokerConfig.setNamesrvAddr("127.0.0.1:9876");
+//
+//            messageStoreConfig.setDeleteWhen("04");
+//            messageStoreConfig.setFileReservedTime(48);
+//            messageStoreConfig.setFlushDiskType(FlushDiskType.ASYNC_FLUSH);
+//            messageStoreConfig.setDuplicationEnable(false);
+//
+//            nettyServerConfig.setListenPort(10912);
+
             MixAll.properties2Object(ServerUtil.commandLine2Properties(commandLine), brokerConfig);
 /*
             brokerConfig.setBrokerId(0);

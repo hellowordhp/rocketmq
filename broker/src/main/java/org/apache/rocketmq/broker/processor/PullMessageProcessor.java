@@ -484,6 +484,7 @@ public class PullMessageProcessor implements NettyRequestProcessor {
         storeOffsetEnable = storeOffsetEnable
             && this.brokerController.getMessageStoreConfig().getBrokerRole() != BrokerRole.SLAVE;
         if (storeOffsetEnable) {
+            //提交消费的offset
             this.brokerController.getConsumerOffsetManager().commitOffset(RemotingHelper.parseChannelRemoteAddr(channel),
                 requestHeader.getConsumerGroup(), requestHeader.getTopic(), requestHeader.getQueueId(), requestHeader.getCommitOffset());
         }
@@ -557,6 +558,7 @@ public class PullMessageProcessor implements NettyRequestProcessor {
             @Override
             public void run() {
                 try {
+                    // 调用拉取请求。本次调用，设置不挂起请求。
                     final RemotingCommand response = PullMessageProcessor.this.processRequest(channel, request, false);
 
                     if (response != null) {
@@ -585,6 +587,7 @@ public class PullMessageProcessor implements NettyRequestProcessor {
                 }
             }
         };
+        // 提交拉取请求到线程池
         this.brokerController.getPullMessageExecutor().submit(new RequestTask(run, channel, request));
     }
 

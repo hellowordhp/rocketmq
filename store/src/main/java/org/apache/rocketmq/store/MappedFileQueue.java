@@ -473,7 +473,7 @@ public class MappedFileQueue {
                         this.mappedFileSize,
                         this.mappedFiles.size());
                 } else {
-                    //获取mappedFile的索引
+                    //获取mappedFile的索引  (总offset / 映射文件Size【计算出在所有文件中所在的索引位置】) - (第一个映射文件来源的offset / 映射文件大小【当前有效第一个映射文件的开始索引位置】）
                     int index = (int) ((offset / this.mappedFileSize) - (firstMappedFile.getFileFromOffset() / this.mappedFileSize));
                     MappedFile targetFile = null;
                     try {
@@ -481,7 +481,7 @@ public class MappedFileQueue {
                     } catch (Exception ignored) {
                     }
 
-                    //当前的offset大于当前mapper的起始offset， 并且不能大于当前mapper的总offet
+                    //当前offset在当前映射文件范围内。当前的offset大于当前mapper的起始offset， 并且不能大于当前mapper的总offset
                     if (targetFile != null && offset >= targetFile.getFileFromOffset()
                         && offset < targetFile.getFileFromOffset() + this.mappedFileSize) {
                         return targetFile;
